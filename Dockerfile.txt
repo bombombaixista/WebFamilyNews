@@ -14,3 +14,7 @@ COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Kanban.dll"]
 
 
+
+amusing-gentleness-production.up.railway.app
+
+
