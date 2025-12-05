@@ -74,6 +74,10 @@
             margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: relative;
+            /* Fix para arraste no mobile */
+            touch-action: none;
+            -webkit-user-drag: element;
+            user-select: none;
         }
 
         .btn-delete {
@@ -92,7 +96,8 @@
             { id: '_todo', title: 'To Do', item: [] },
             { id: '_doing', title: 'Doing', item: [] },
             { id: '_done', title: 'Done', item: [] }
-          ]
+          ],
+          dragItems: true
         });
 
         // Adicionar card
@@ -108,7 +113,9 @@
               <div class="kanban-item">
                 <strong>${title}</strong><br>
                 <small>${description || ""}</small>
-                <span class="btn-delete" onclick="deleteCard(event, ${tempId})">🗑️</span>
+                <span class="btn-delete" onclick="deleteCard(event, ${tempId})">
+                  <i class="bi bi-trash"></i>
+                </span>
               </div>`
           });
 
@@ -156,16 +163,18 @@
               `<div class="kanban-item">
                  <strong>${title}</strong><br>
                  <small>${description}</small>
-                 <span class="btn-delete" onclick="deleteCard(event, ${id})">🗑️</span>
+                 <span class="btn-delete" onclick="deleteCard(event, ${id})">
+                   <i class="bi bi-trash"></i>
+                 </span>
                </div>`;
             }
             bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
           });
         });
 
-        // Excluir card (com stopPropagation)
+        // Excluir card
         function deleteCard(e, id){
-          e.stopPropagation(); // impede que o clique vire drag
+          e.stopPropagation();
           kanban.removeElement('card' + id);
           fetch('/Card/Delete', {
             method: 'POST',
